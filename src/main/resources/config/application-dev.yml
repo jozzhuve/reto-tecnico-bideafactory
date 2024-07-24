@@ -1,0 +1,39 @@
+api:
+  booking:
+    discountApi:
+      host: "https://sbv2bumkomidlxwffpgbh4k6jm0ydskh.lambda-url.us-east-1.on.aws"
+      resourcePath: "${api.booking.discountApi.host}/"
+      timeout: 10000
+
+logging:
+  level:
+    "[pe.bideafactory.api.booking]": DEBUG
+    root: INFO
+    org.springframework.cache: TRACE
+
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/book?currentSchema=book
+    username: bideafactory
+    password:
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 5
+  output:
+    ansi:
+      enabled: "ALWAYS"
+  main:
+    banner-mode: "off"
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
