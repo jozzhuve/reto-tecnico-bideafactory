@@ -1,6 +1,7 @@
 package pe.bideafactory.api.booking.thrirdparty.internal.discount;
 
 
+import feign.RetryableException;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 @FeignClient(name = "discountApi", url = "${api.booking.discountApi.resourcePath}")
 public interface DiscountApiClient {
 
-  @Retryable(retryFor = TimeoutException.class, maxAttempts = 3, backoff = @Backoff(delay = 100))
+  @Retryable(retryFor = RetryableException.class, maxAttempts = 3, backoff = @Backoff(delay = 100))
   @PostMapping("/address/{id}")
   ResponseEntity<DiscountDtoResponse> retrieveDiscount(@RequestBody DiscountDtoRequest discountRequest);
 

@@ -5,6 +5,11 @@ api:
       resourcePath: "${api.booking.discountApi.host}/"
       timeout: 10000
 
+      # USE FOR TEST TIMEOUT MOCK
+      #host: "http://localhost:8089"
+      #resourcePath: "${api.booking.discountApi.host}/apiDiscount"
+      #timeout: 10000
+
 logging:
   level:
     "[pe.bideafactory.api.booking]": DEBUG
@@ -12,6 +17,13 @@ logging:
     org.springframework.cache: TRACE
 
 spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
@@ -30,10 +42,6 @@ spring:
   main:
     banner-mode: "off"
 
-feign:
-  client:
-    config:
-      default:
-        connectTimeout: 5000
-        readTimeout: 5000
-        loggerLevel: basic
+
+
+

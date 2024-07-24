@@ -1,6 +1,7 @@
 package pe.bideafactory.api.booking.service.impl;
 
 import com.google.gson.Gson;
+import feign.RetryableException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @Service
 @AllArgsConstructor
@@ -73,8 +73,16 @@ public class BookServiceImpl implements BookService {
       }
       log.debug("Discount response {}", new Gson().toJson(discountDtoResponse));
 
-    } catch (BookException bex) {
-      throw bex;
+    } catch (BookException bookException) {
+      log.error(bookException.getMessage(), bookException);
+      throw bookException;
+    } catch (RetryableException retryableException) {
+      log.error(retryableException.getMessage(), retryableException);
+      throw new BookException(
+          REQUEST_TIMEOUT.value(),
+          REQUEST_TIMEOUT.getReasonPhrase(),
+          REQUEST_TIMEOUT.getReasonPhrase()
+      );
     }
     return discountDtoResponse;
   }
